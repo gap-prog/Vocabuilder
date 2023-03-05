@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+        <title>
+            Vocabuilder
+        </title>
+    </head>
+    <body>
+        <div class="main main-1 no-print">
+            <h1>
+                Vocabuilder
+            </h1>
+            <h2>
+                <!-- Italic -->
+                An innovative approach to vocabuilding.
+            </h2>
+            <p>
+                Enter a word or leave blank for a random test.
+            </p>
+            <div class="input">
+                <form method="POST">
+                    <input name="word" placeholder="Word" class="word_input">
+                    <input type="submit" value="Search" class="button button-joined">
+                </form>
+            </div>
+            {% if data %}
+                <section class="content">
+                    {% if data['error'] %}
+                        <div class="error">
+                            {{ data['error'] }}
+                        </div>
+                    {% else %}
+                        {% block content %}
+                        {% include 'data.html' %}
+                        {% endblock content %}
+                    {% endif %}
+                </section>
+            {% endif %}
+        </div>
+        <div class="main main-2" id="output">
+            <div class="history">
+                <h3 style="margin-bottom: 2rem;">
+                    History
+                </h3>
+                <button style="margin-top: -1.7rem; background-color: #fff; color: #1d2330; border: none; border-radius: 2rem; padding: 0.5rem 0.75rem; margin-left: 1rem; cursor: pointer;" onclick="window.print()" class="button_hidden">
+                    Print
+                </button>
+            </div>
+            <ol style="font-size: 1.5rem;">
+                {% for k, v in words.items() %}
+                    <div class="word_group">
+                        <li>
+                            <strong>{{ k }}</strong>
+                        </li>
+                        <ul class="output_def">
+                            {% for k1, v2 in v.items() %}
+                                <li>
+                                    ({{ k1 }}): {{ v2['definition'] }}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endfor %}
+            </ol>
+        </div>
+        <style type="text/css" media="print">
+            .no-print {
+                display: none;
+            }
+            #output {
+                background-color: #fff;
+                color: #000;
+                margin: 0;
+                border: none;
+                box-shadow: none;
+                width: 100%;
+            }
+            .output_def {
+                display: block;
+            }
+            .button_hidden {
+                display: none;
+            }
+            @page {
+                size: auto;
+                margin: 10px 0px 0px 0px;
+            }
+        </style>
+        <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    </body>
+</html>

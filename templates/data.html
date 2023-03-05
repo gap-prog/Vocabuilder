@@ -1,0 +1,56 @@
+{% block content %}
+    <div class="card">
+        <h3>
+            {{ data['word'] }}
+        </h3>
+        <div class="sub-information">
+            {% if data['phonetic'] %}
+                <p class="phonetic">
+                    {{ data['phonetic'] }}
+                </p>
+            {% endif %}
+            {% if data['sentiment'] > 0 %}
+                <div class="sentiment green">
+                    {{ data['sentiment'] }}
+                </div>
+            {% elif data['sentiment'] < 0 %}
+                <div class="sentiment red">
+                    {{ data['sentiment'] }}
+                </div>
+            {% else %}
+                <div class="sentiment neutral">
+                    {{ data['sentiment'] }}
+                </div>
+            {% endif %}
+        </div>
+        <div id="hidden" style="color: #1d2330">
+            <ol>
+                {% for k, v in data['meanings'].items() %}
+                <div class="definitions">
+                    <span class="partOfSpeech">{{ k }}</span>
+                    <li>
+                        {{ v['definition'] if v['definition'] else '' }}
+                        {% if v['example'] %}
+                            <ul class="examples">
+                                <li>
+                                    {{ v['example'] }}
+                                </li>
+                            </ul>
+                        {% endif %}
+                    </li>
+                </div>
+                {% endfor %}
+            </ol>
+        </div>
+        {% if data['audio'] %}
+            <audio controls src="{{ data['audio'] }}"></audio>
+        {% endif %}
+        <br>
+        <br>
+        <br>
+        <button onclick="toggleHidden()" style="padding: 1rem; background-color: #1d2330; border: 0.2rem solid #fff; margin-left: -1rem; border-radius: 2rem; color: #fff; cursor: pointer;">
+            Reveal Definitions
+        </button>
+    <!--maybe check to hide if js works else in main-->
+    </div>
+{% endblock content %}
